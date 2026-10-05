@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hướng dẫn Chuyển Xe Nội Bộ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F6FC;
+    --panel: #FFFFFF;
+    --ink: #0B1340;
+    --ink-soft: #5B6690;
+    --border: #012BA4;
+    --border-soft: #D6DEF7;
+    --green: #012BA4;
+    --green-soft: #E7ECFB;
+    --blue: #1544C4;
+    --blue-soft: #E7ECFB;
+    --red: #C1504A;
+    --red-soft: #FBEAE9;
+    --gold: #2B3E8F;
+    --gold-soft: #ECEFFA;
+    --badge-ink: #FFFFFF;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Trang này luôn dùng 1 bảng màu cố định, không tự đổi theo chế độ tối của máy,
+     vì các khung nội dung bên trong luôn có nền trắng cố định. */
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: 'Be Vietnam Pro', -apple-system, sans-serif;
+    min-height: 100%; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 18px 16px 70px; }
+
+  .hero {
+    background: linear-gradient(135deg, #012BA4 0%, #1A47C9 55%, #3D63D8 100%);
+    border-radius: 22px; padding: 34px 22px; margin-bottom: 18px;
+    position: relative; overflow: hidden; color: #fff; text-align: center;
+    box-shadow: 0 10px 28px -10px rgba(1,43,164,.5);
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.18) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 32px;
+    margin: 0; line-height: 1.2; letter-spacing: 1.5px; white-space: nowrap;
+    color: #FFFFFF; text-shadow: 0 2px 0 rgba(0,0,0,.14), 0 6px 18px rgba(0,0,0,.18);
+    position: relative; z-index: 1;
+  }
+  .hero .deco { position: absolute; right: -10px; bottom: -18px; font-size: 74px; opacity: .22; transform: rotate(-6deg); }
+
+  .progress-bar {
+    background: var(--panel); border: 2px solid var(--border-soft); border-radius: 14px;
+    padding: 12px 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;
+  }
+  .progress-bar .track { flex: 1; height: 10px; background: var(--border-soft); border-radius: 6px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--border); border-radius: 6px; transition: width .25s ease; width: 0%; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
+
+  .card {
+    background: var(--panel); border: 3px solid var(--border); border-radius: 22px;
+    padding: 24px 20px 20px; margin-bottom: 20px; position: relative;
+  }
+  .badge {
+    position: absolute; top: -18px; left: 18px; width: 42px; height: 42px; border-radius: 50%;
+    background: var(--border); color: var(--badge-ink); display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 21px; box-shadow: 0 3px 0 rgba(0,0,0,.08);
+  }
+  .card h2 {
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 20px; color: var(--green);
+    margin: 6px 0 14px; padding-left: 34px;
+  }
+  .card > p.intro { font-size: 14px; color: var(--ink-soft); margin: -6px 0 14px; }
+
+  .case-grid { display: grid; gap: 10px; }
+  .case {
+    background: var(--green-soft); border-radius: 14px; padding: 12px 14px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .case .icon { font-size: 22px; line-height: 1; margin-top: 1px; }
+  .case .tag { font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 14.5px; color: var(--green); display: block; }
+  .case .desc { font-size: 13.5px; color: var(--ink); margin-top: 2px; }
+
+  .role-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .role-chip {
+    background: var(--blue-soft); color: var(--blue); font-size: 13.5px; font-weight: 600;
+    padding: 7px 13px; border-radius: 999px; display: flex; align-items: center; gap: 6px;
+  }
+
+  .subcard {
+    border: 2px dashed var(--border-soft); border-radius: 16px; padding: 16px 14px 12px; margin-bottom: 16px; position: relative;
+  }
+  .subcard:last-child { margin-bottom: 0; }
+  .subbadge {
+    position: absolute; top: -14px; left: 14px; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--green); color: #fff; display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 15px;
+  }
+  .subcard h3 {
+    font-family: 'Baloo 2', sans-serif; font-size: 16.5px; font-weight: 700; color: var(--ink);
+    margin: 4px 0 10px; padding-left: 26px;
+  }
+
+  .checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px; padding: 9px 10px; border-radius: 10px;
+    cursor: pointer; user-select: none; transition: background .12s ease;
+  }
+  .check-item:hover { background: var(--green-soft); }
+  .check-item .box {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--accent, var(--border));
+    display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: background .12s ease;
+  }
+  .check-item.checked .box { background: var(--accent, var(--border)); }
+  .check-item .box svg { width: 13px; height: 13px; opacity: 0; transition: opacity .1s ease; }
+  .check-item.checked .box svg { opacity: 1; }
+  .check-item .txt { font-size: 14px; color: var(--ink); line-height: 1.4; }
+  .check-item.checked .txt { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: var(--accent, var(--border)); }
+
+  .callout { border-radius: 14px; padding: 12px 14px; margin: 10px 0; display: flex; gap: 10px; }
+  .callout .icon { font-size: 19px; flex-shrink: 0; }
+  .callout .lead { font-weight: 700; font-family: 'Baloo 2', sans-serif; font-size: 14.5px; display: block; margin-bottom: 2px; }
+  .callout .txt { font-size: 13.5px; line-height: 1.5; }
+  .sublist { list-style: none; margin: 4px 0 0; padding: 0; }
+  .sublist li { font-size: 13.5px; line-height: 1.6; padding-left: 14px; position: relative; }
+  .sublist li::before { content: "•"; position: absolute; left: 0; }
+  .callout.gold { background: var(--gold-soft); }
+  .callout.gold .lead { color: var(--gold); }
+  .callout.red { background: var(--red-soft); }
+  .callout.red .lead { color: var(--red); }
+  .callout.blue { background: var(--blue-soft); }
+  .callout.blue .lead { color: var(--blue); }
+
+  .note-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .note-item { display: flex; gap: 10px; background: var(--red-soft); border-radius: 12px; padding: 11px 13px; }
+  .note-item .num {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--red); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 700; font-family: 'Baloo 2', sans-serif;
+  }
+  .note-item .txt { font-size: 13.5px; line-height: 1.5; color: var(--ink); }
+
+  .reset-row { text-align: center; margin-top: 8px; }
+  .reset-btn {
+    background: transparent; border: 2px solid var(--border-soft); color: var(--ink-soft);
+    font-size: 13px; padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  }
+  .reset-btn:hover { border-color: var(--border); color: var(--green); }
+
+  footer { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-top: 10px; }
+
+  @media (max-width: 420px) {
+    .hero h1 { font-size: 19px; white-space: normal; letter-spacing: .5px; }
+    .card { padding: 22px 14px 16px; }
+  }
+
+  .accordion-item {
+    background: var(--panel); border-radius: 22px;
+    margin-bottom: 16px; overflow: hidden; box-shadow: 0 4px 14px -6px rgba(0,0,0,.18);
+  }
+  .accordion-header {
+    display: flex; align-items: center; gap: 14px; padding: 18px;
+    cursor: pointer; user-select: none; border: none; width: 100%;
+    text-align: left; font-family: inherit;
+    background: var(--accent, var(--border));
+  }
+  .accordion-header .roman {
+    flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.28);
+    color: #FFFFFF; display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 17px;
+  }
+  .accordion-header .title {
+    flex: 1; font-family: 'Baloo 2', sans-serif; font-size: 18px; font-weight: 700;
+    color: #FFFFFF; text-shadow: 0 1px 3px rgba(0,0,0,.35);
+  }
+  .accordion-header .chevron { flex-shrink: 0; width: 22px; height: 22px; color: #FFFFFF; transition: transform .22s ease; }
+  .accordion-item.open > .accordion-header .chevron { transform: rotate(180deg); }
+  .accordion-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+  .accordion-item.open > .accordion-body { max-height: 4000px; }
+  .accordion-body-inner { padding: 2px 18px 20px; }
+  .accordion-body-inner h4 {
+    font-family: 'Baloo 2', sans-serif; font-size: 15px; font-weight: 700; color: var(--green);
+    margin: 14px 0 8px;
+  }
+  .accordion-body-inner h4:first-child { margin-top: 0; }
+  .accordion-body-inner > p.lead-txt { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0 0 10px; }
+  .note-frame {
+    border: 3px solid var(--border); border-radius: 18px; padding: 16px 16px 10px; margin-top: 10px;
+  }
+  .note-frame h4 { margin-top: 0 !important; }
+
+  .accordion-item:not(.outer) {
+    background: var(--accent, var(--border));
+    border: none;
+    border-radius: 18px;
+  }
+  .accordion-item:not(.outer) .accordion-header { background: transparent; padding: 13px 15px; }
+  .accordion-item:not(.outer) .roman {
+    width: 44px; height: 44px; border-radius: 13px; background: #FFFFFF;
+    color: var(--accent, var(--border)); font-size: 18px;
+  }
+  .accordion-item:not(.outer) .title { color: #1A1A1A; text-shadow: none; font-size: 16.5px; }
+  .accordion-item:not(.outer) .chevron { color: #1A1A1A; }
+  .accordion-item:not(.outer) .accordion-body-inner {
+    background: #FFFFFF; border-radius: 14px; margin: 0 8px 10px; padding: 14px 14px 10px;
+  }
+
+  .accordion-header .title-wrap { flex: 1; }
+  .accordion-header .title-wrap .title { display: block; }
+  .accordion-header .title-wrap .subtitle {
+    display: block; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 500; font-size: 12.5px;
+    color: rgba(255,255,255,.95); margin-top: 1px; text-shadow: 0 1px 2px rgba(0,0,0,.3);
+  }
+  .accordion-item.outer > .accordion-body > .accordion-body-inner { padding: 14px 10px 16px; }
+  .accordion-item.outer .accordion-item { margin-bottom: 14px; }
+  .accordion-item.outer .accordion-item:last-child { margin-bottom: 0; }
+
+  .arrow-note {
+    display: flex; align-items: center; gap: 10px; background: var(--green-soft);
+    border-radius: 12px; padding: 12px 14px; margin: 10px 0 14px; font-size: 13.5px; color: var(--ink);
+  }
+  .arrow-note .arrow { font-size: 17px; flex-shrink: 0; color: var(--border); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>QUY TRÌNH BÀN GIAO XE</h1>
+    <div class="deco">🚚</div>
+  </div>
+
+  <div class="progress-bar">
+    <span class="label" id="progressLabel">0/0 mục đã hoàn tất</span>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+  </div>
+
+  <p style="text-align:center; font-size:14px; color:var(--ink-soft); margin: 0 0 14px;">Khi kho có nhu cầu chuyển xe nội bộ gồm:</p>
+
+  <!-- ============ TRƯỜNG HỢP 1 ============ -->
+  <div class="accordion-item outer" id="sc1" style="--accent:#146B38;">
+    <button class="accordion-header" data-target="sc1">
+      <span class="roman">1</span>
+      <span class="title-wrap"><span class="title">Chuyển kho, Chuyển tài</span><span class="subtitle">Bàn giao xe cho kho mới, tài chính mới</span></span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-body-inner">
+
+        <!-- I. Kho bàn giao xe -->
+        <div class="accordion-item" id="sc1-1" style="--accent:#E0526B;">
+          <button class="accordion-header" data-target="sc1-1">
+            <span class="roman">I</span>
+            <span class="title">Kho bàn giao xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <p class="lead-txt">Trưởng kho/Phó kho/Quản lý/Chuyên viên viết BCNB bàn giao xe bao gồm các nội dung sau:</p>
+            <ul class="checklist" data-group="sc1-1">
+              <li class="check-item" data-id="sc1-1-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Thông tin biển số xe</span></li>
+              <li class="check-item" data-id="sc1-1-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Kho hiện tại, User họ và tên tài xế hiện tại</span></li>
+              <li class="check-item" data-id="sc1-1-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Kho mới, User họ và tên tài xế mới nhận xe</span></li>
+              <li class="check-item" data-id="sc1-1-4"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Tiền tạm ứng theo tài</span></li>
+              <li class="check-item" data-id="sc1-1-5"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Giấy tờ, công cụ dụng cụ theo xe</span></li>
+              <li class="check-item" data-id="sc1-1-6"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>100% đính kèm biên bản bàn giao có chữ ký xác nhận của Trưởng kho/Phó kho/Quản lý/Chuyên viên</b></span></li>
+            </ul>
+            <div class="note-frame">
+              <h4>Lưu ý</h4>
+              <div class="callout blue">
+                <span class="icon">📨</span>
+                <div><span class="lead">1/ BCNB gửi cho các bên liên quan bao gồm</span>
+                  <ul class="sublist">
+                    <li>BP. Kiểm soát xe</li>
+                    <li>Bảo dưỡng phụ trách xe</li>
+                    <li>Trưởng kho/Phó kho/Chuyên viên/Quản lý liên quan kho giao–nhận xe</li>
+                    <li>Tài chính cũ</li>
+                    <li>Tài chính mới</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout gold"><span class="icon">💰</span><div><span class="lead">2/ Tài xế cũ đang giữ tiền tạm ứng</span><span class="txt">BCNB ghi rõ đã bàn giao cho tài xế mới, chi tiết số tiền.</span></div></div>
+              <div class="callout blue"><span class="icon">🧾</span><div><span class="lead">3/ Tài xế cũ đã hoàn trả về Công ty</span><span class="txt">BCNB ghi rõ số tiền đã nộp, đính kèm biên lai chuyển khoản.</span></div></div>
+              <div class="callout red"><span class="icon">⚠️</span><div><span class="lead">4/ Tài xế cũ nghỉ ngang / chưa hoàn tạm ứng</span><span class="txt">Trưởng kho/Phó kho/Quản lý/Chuyên viên gửi BCNB truy thu, Trưởng kho xác nhận để BP KSX xử lý và gửi kế toán thực hiện truy thu.</span></div></div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- II. Tài chính cũ bàn giao xe -->
+        <div class="accordion-item" id="sc1-2" style="--accent:#C9A227;">
+          <button class="accordion-header" data-target="sc1-2">
+            <span class="roman">II</span>
+            <span class="title">Tài chính cũ bàn giao xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <ul class="checklist" data-group="sc1-2">
+              <li class="check-item" data-id="sc1-2-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Bàn giao đầy đủ tiền tạm ứng theo xe cho tài chính mới</span></li>
+              <li class="check-item" data-id="sc1-2-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Bàn giao giấy tờ xe, công cụ dụng cụ xe</span></li>
+              <li class="check-item" data-id="sc1-2-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Ký biên bản bàn giao xe</span></li>
+            </ul>
+          </div></div>
+        </div>
+
+        <!-- III. Tài chính mới nhận xe -->
+        <div class="accordion-item" id="sc1-3" style="--accent:#D59C8C;">
+          <button class="accordion-header" data-target="sc1-3">
+            <span class="roman">III</span>
+            <span class="title">Tài chính mới nhận xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <ul class="checklist" data-group="sc1-3">
+              <li class="check-item" data-id="sc1-3-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Xác nhận BCNB ghi rõ biển số xe nhận được</span></li>
+              <li class="check-item" data-id="sc1-3-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Ghi rõ đã nhận đủ giấy tờ, công cụ dụng cụ theo xe chưa</span></li>
+              <li class="check-item" data-id="sc1-3-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>Đã nhận tiền tạm ứng từ tài chính cũ</b> — ghi rõ số tiền nhận được</span></li>
+              <li class="check-item" data-id="sc1-3-4"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>Chưa nhận tiền tạm ứng từ tài chính cũ</b> — ghi rõ có nhu cầu nhận tạm ứng hay không</span></li>
+            </ul>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TRƯỜNG HỢP 2 ============ -->
+  <div class="accordion-item outer" id="sc2" style="--accent:#233FB0;">
+    <button class="accordion-header" data-target="sc2">
+      <span class="roman">2</span>
+      <span class="title-wrap"><span class="title">Chuyển kho, giữ tài</span><span class="subtitle">Chỉ chuyển kho xe, không thay đổi tài chính</span></span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-body-inner">
+        <p class="lead-txt">Trưởng kho/Phó kho/Quản lý/Chuyên viên viết BCNB bàn giao xe bao gồm các nội dung sau:</p>
+        <ul class="checklist" data-group="sc2">
+          <li class="check-item" data-id="sc2-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Thông tin biển số xe</span></li>
+          <li class="check-item" data-id="sc2-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">User họ và tên tài xế</span></li>
+          <li class="check-item" data-id="sc2-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Kho hiện tại của xe</span></li>
+          <li class="check-item" data-id="sc2-4"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Kho mới của xe</span></li>
+        </ul>
+        <div class="arrow-note"><span class="arrow">➡️</span><span>Sau đó Trưởng kho mới nhận xe xác nhận BCNB để BP Kiểm soát xe có căn cứ chuyển xe.</span></div>
+        <div class="note-frame">
+          <h4>Lưu ý</h4>
+          <div class="callout blue">
+            <span class="icon">📨</span>
+            <div><span class="lead">BCNB gửi cho các bên liên quan bao gồm</span>
+              <ul class="sublist">
+                <li>BP. Kiểm soát xe</li>
+                <li>Bảo dưỡng phụ trách xe</li>
+                <li>Trưởng kho/Phó kho/Chuyên viên/Quản lý liên quan kho giao–nhận xe</li>
+                <li>Tài chính của xe</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TRƯỜNG HỢP 3 ============ -->
+  <div class="accordion-item outer" id="sc3" style="--accent:#0A6456;">
+    <button class="accordion-header" data-target="sc3">
+      <span class="roman">3</span>
+      <span class="title-wrap"><span class="title">Chuyển tài</span><span class="subtitle">Bàn giao xe cho tài chính mới, không thay đổi mã kho</span></span>
+      <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="accordion-body">
+      <div class="accordion-body-inner">
+
+        <!-- I. Kho bàn giao xe -->
+        <div class="accordion-item" id="sc3-1" style="--accent:#E0526B;">
+          <button class="accordion-header" data-target="sc3-1">
+            <span class="roman">I</span>
+            <span class="title">Kho bàn giao xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <p class="lead-txt">Trưởng kho/Phó kho/Quản lý/Chuyên viên viết BCNB bàn giao xe bao gồm các nội dung sau:</p>
+            <ul class="checklist" data-group="sc3-1">
+              <li class="check-item" data-id="sc3-1-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Thông tin biển số xe</span></li>
+              <li class="check-item" data-id="sc3-1-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Kho hiện tại của xe</span></li>
+              <li class="check-item" data-id="sc3-1-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">User họ và tên tài xế cũ bàn giao xe</span></li>
+              <li class="check-item" data-id="sc3-1-4"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">User họ và tên tài xế mới nhận xe</span></li>
+              <li class="check-item" data-id="sc3-1-5"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Tiền tạm ứng theo tài</span></li>
+              <li class="check-item" data-id="sc3-1-6"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Giấy tờ, công cụ dụng cụ theo xe</span></li>
+              <li class="check-item" data-id="sc3-1-7"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>100% đính kèm biên bản bàn giao có chữ ký xác nhận của Trưởng kho/Phó kho/Quản lý/Chuyên viên</b></span></li>
+            </ul>
+            <div class="note-frame">
+              <h4>Lưu ý</h4>
+              <div class="callout blue">
+                <span class="icon">📨</span>
+                <div><span class="lead">1/ BCNB gửi cho các bên liên quan bao gồm</span>
+                  <ul class="sublist">
+                    <li>BP. Kiểm soát xe</li>
+                    <li>Bảo dưỡng phụ trách xe</li>
+                    <li>Trưởng kho/Phó kho/Chuyên viên/Quản lý liên quan kho giao–nhận xe</li>
+                    <li>Tài chính cũ</li>
+                    <li>Tài chính mới</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="callout gold"><span class="icon">💰</span><div><span class="lead">2/ Tài xế cũ đang giữ tiền tạm ứng</span><span class="txt">BCNB ghi rõ đã bàn giao cho tài xế mới, chi tiết số tiền.</span></div></div>
+              <div class="callout blue"><span class="icon">🧾</span><div><span class="lead">3/ Tài xế cũ đã hoàn trả về Công ty</span><span class="txt">BCNB ghi rõ số tiền đã nộp, đính kèm biên lai chuyển khoản.</span></div></div>
+              <div class="callout red"><span class="icon">⚠️</span><div><span class="lead">4/ Tài xế cũ nghỉ ngang / chưa hoàn tạm ứng</span><span class="txt">Trưởng kho/Phó kho/Quản lý/Chuyên viên gửi BCNB truy thu, Trưởng kho xác nhận để BP KSX xử lý và gửi kế toán thực hiện truy thu.</span></div></div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- II. Tài chính cũ bàn giao xe -->
+        <div class="accordion-item" id="sc3-2" style="--accent:#C9A227;">
+          <button class="accordion-header" data-target="sc3-2">
+            <span class="roman">II</span>
+            <span class="title">Tài chính cũ bàn giao xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <ul class="checklist" data-group="sc3-2">
+              <li class="check-item" data-id="sc3-2-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Bàn giao đầy đủ tiền tạm ứng theo xe cho tài chính mới</span></li>
+              <li class="check-item" data-id="sc3-2-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Bàn giao giấy tờ xe, công cụ dụng cụ xe</span></li>
+              <li class="check-item" data-id="sc3-2-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Ký biên bản bàn giao xe</span></li>
+            </ul>
+          </div></div>
+        </div>
+
+        <!-- III. Tài chính mới nhận xe -->
+        <div class="accordion-item" id="sc3-3" style="--accent:#D59C8C;">
+          <button class="accordion-header" data-target="sc3-3">
+            <span class="roman">III</span>
+            <span class="title">Tài chính mới nhận xe</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="accordion-body"><div class="accordion-body-inner">
+            <ul class="checklist" data-group="sc3-3">
+              <li class="check-item" data-id="sc3-3-1"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Xác nhận BCNB ghi rõ biển số xe nhận được</span></li>
+              <li class="check-item" data-id="sc3-3-2"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt">Ghi rõ đã nhận đủ giấy tờ, công cụ dụng cụ theo xe chưa</span></li>
+              <li class="check-item" data-id="sc3-3-3"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>Đã nhận tiền tạm ứng từ tài chính cũ</b> — ghi rõ số tiền nhận được</span></li>
+              <li class="check-item" data-id="sc3-3-4"><span class="box"><svg viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="txt"><b>Chưa nhận tiền tạm ứng từ tài chính cũ</b> — ghi rõ có nhu cầu nhận tạm ứng hay không</span></li>
+            </ul>
+          </div></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-row">
+    <button class="reset-btn" id="resetBtn">Đặt lại checklist</button>
+  </div>
+  <footer>Tài liệu nội bộ — dùng cho nhân viên kho tham khảo khi thực hiện chuyển xe.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const STORAGE_KEY = 'chuyen-xe-noi-bo-checklist-v1';
+  const items = Array.from(document.querySelectorAll('.check-item'));
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function loadState(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch (e) { return {}; }
+  }
+  function saveState(state){
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function updateProgress(){
+    const total = items.length;
+    const done = items.filter(i => i.classList.contains('checked')).length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    fill.style.width = pct + '%';
+    label.textContent = done + '/' + total + ' mục đã hoàn tất';
+  }
+
+  function applyState(){
+    const state = loadState();
+    items.forEach(item => {
+      if (state[item.dataset.id]) item.classList.add('checked');
+    });
+    updateProgress();
+  }
+
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+      const state = loadState();
+      state[item.dataset.id] = item.classList.contains('checked');
+      saveState(state);
+      updateProgress();
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    items.forEach(i => i.classList.remove('checked'));
+    saveState({});
+    updateProgress();
+  });
+
+  applyState();
+
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = document.getElementById(header.dataset.target);
+      item.classList.toggle('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>
