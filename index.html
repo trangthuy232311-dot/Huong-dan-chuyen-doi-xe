@@ -28,26 +28,8 @@
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-    --bg: #0B1340; --panel: #121B52; --ink: #E9ECFB; --ink-soft: #9FA8D6;
-    --border: #5C7CF0; --border-soft: #26316E;
-    --green: #5C7CF0; --green-soft: #1C2860;
-    --blue: #7D97F5; --blue-soft: #1C2860;
-    --red: #EF8A83; --red-soft: #4A2220;
-    --gold: #9CB0F5; --gold-soft: #1C2860;
-    --badge-ink: #0B1340;
-  }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0B1340; --panel: #121B52; --ink: #E9ECFB; --ink-soft: #9FA8D6;
-    --border: #5C7CF0; --border-soft: #26316E;
-    --green: #5C7CF0; --green-soft: #1C2860;
-    --blue: #7D97F5; --blue-soft: #1C2860;
-    --red: #EF8A83; --red-soft: #4A2220;
-    --gold: #9CB0F5; --gold-soft: #1C2860;
-    --badge-ink: #0B1340;
-  }
+  /* Trang này luôn dùng 1 bảng màu cố định, không tự đổi theo chế độ tối của máy,
+     vì các khung nội dung bên trong luôn có nền trắng cố định. */
   html { scroll-padding-top: env(safe-area-inset-top, 0px); }
   * { box-sizing: border-box; }
   body {
